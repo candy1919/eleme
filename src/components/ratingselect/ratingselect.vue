@@ -1,0 +1,19 @@
+<template>
+	<div>
+		<div>
+			<div>
+				<span>全部</span><span>55</span>
+			</div>
+			<div>
+				<span>满意</span><span>55</span>
+			</div>
+			<div>
+				<span>不满意</span><span>55</span>
+			</div>
+		</div>
+		<div>
+			<i></i>
+			<span>只看有内容的评价</span>
+		</div>
+	</div>
+</template>

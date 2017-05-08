@@ -9,7 +9,7 @@
 		<div class="list" ref="list" @scroll="calculateScrollY">
 		<div v-for="item in goods" class="food-hook">
 			<p class="title">{{item.name}}</p>
-			<div class="wrap-item" v-for="food in item.foods">
+			<div class="wrap-item" v-for="food in item.foods"  @click="chosefood(food)">
 			<div class="list-item">
 				<div class="wrap-avatar">
 					<img :src="food.icon">
@@ -28,14 +28,17 @@
 			</div>
 		</div>
 		</div>
+		<food :show="foodShow" :selectedFood="fooditem"></food>
 		<vFooter :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice" :selectFood="selectFood" ref="cart"></vFooter>
 	</div>
 </template>
 <script>
 import cartControl from 'components/cartControl/cartControl'
+import food from 'components/food/food'
 export default{
 	components:{
-		cartControl
+		cartControl,
+		food
 	},
 	props:{
 		seller:{
@@ -46,7 +49,9 @@ export default{
 		return{
 			goods:[],
 			listHeight:[],
-			scrollY:0
+			scrollY:0,
+			fooditem:{},
+			foodShow:false,
 		}
 	},
 	computed:{
@@ -79,6 +84,11 @@ export default{
 	  	});
 	},
 	methods:{
+		chosefood(item){
+			this.fooditem=item;
+			this.foodShow=true;
+			console.log(this.fooditem.name)
+		},
 		addcart(el){
 			let cart=this.$refs.cart;
 			cart.dropball(el)

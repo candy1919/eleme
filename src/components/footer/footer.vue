@@ -10,7 +10,7 @@
 			<p class="send">配送费￥{{deliveryPrice}}元</p>
 		</div>
 		<div class="submit"  :class="{enough:totalPrice>=this.minPrice}">
-			<a>{{payDesc}}</a>
+			<a @click="pay">{{payDesc}}</a>
 		</div>
 		<div class="ball-container">
 			<div v-for="ball in balls">
@@ -22,10 +22,10 @@
 			</div>
 		</div>
 		<transition name="fade">
-		<div class="shopcart-list" v-if="cartShow">
+		<div class="shopcart-list" v-if="listCount">
 			<div class="header">
 				<span class="title">购物车</span>
-				<span class="empty">清空</span>
+				<span class="empty" @click="empty">清空</span>
 			</div>
 			<div class="content-list">
 				<ul>
@@ -39,6 +39,9 @@
 				</ul>
 			</div>
 		</div>
+		</transition>
+		<transition name="make-fade">
+			<div class="mask" v-if="listCount" @click="hiddenList"></div>
 		</transition>
 	</div>
 </template>
@@ -80,6 +83,13 @@ import cartControl from 'components/cartControl/cartControl'
 			}
 		},
 		computed:{
+			listCount(){
+				if(this.totalPrice&&this.cartShow){
+					return true;
+				}else{
+					return false;
+				}
+			},
 			totalPrice(){
 				let total=0;
 				this.selectFood.forEach(food=>{
@@ -109,8 +119,18 @@ import cartControl from 'components/cartControl/cartControl'
 			}
 		},
 		methods:{
+			pay(){
+				console.log("pay");
+			},
+			empty(){
+				this.selectFood.forEach(food=>{food.count=0;});
+				this.cartShow=false;
+			},
+			hiddenList(){
+				this.cartShow=false;
+			},
 			showList(){
-				this.cartShow=true;
+					this.cartShow=true;
 			},
 			dropball(el){
 				for(let i=0;i<this.balls.length;i++){
@@ -171,6 +191,9 @@ import cartControl from 'components/cartControl/cartControl'
 <style lang="less" scoped>
 	@import "../../common/less/config.less";
 	@import "../../common/less/common.less";
+	::-webkit-scrollbar{
+		display: none;
+	}
 	.wrap{
 		margin: 0 24px/@devicePixelRatio;
 	}
@@ -181,6 +204,7 @@ import cartControl from 'components/cartControl/cartControl'
 		bottom: 0;
 		position:fixed;
 		padding-left:120px/@devicePixelRatio; 
+		z-index: 50;
 		background: #141d27;
 		.inf-cart{
 			flex:1;
@@ -282,7 +306,7 @@ import cartControl from 'components/cartControl/cartControl'
 			bottom: 0;
 			left: 0;
 			width: 100%;
-			z-index:-1;
+			z-index:40;
 			padding-bottom:50px;
 			.header,.content-list{
 				padding: 0 36px/@devicePixelRatio;
@@ -306,6 +330,8 @@ import cartControl from 'components/cartControl/cartControl'
 				}
 			}
 			.content-list{
+				max-height: 235px;
+				overflow: auto;
 				background-color: #fff;
 				.item{
 					position: relative;
@@ -342,6 +368,21 @@ import cartControl from 'components/cartControl/cartControl'
 		.fade-enter, .fade-leave-active {
 		  transform: translate3d(0,100%,0);
 		  opacity: 0;
-		}		
+		}	
+		.mask{
+			position: fixed;
+			left: 0;
+			top:0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(7, 17, 27, 0.6);
+			z-index: 30;
+		}
+		.mask-fade-enter,.mask-fade-leave-active{
+			opacity: 0;
+		}
+		.mask-fade-enter-avtive,.mask-fade-leave{
+			transition:all .3s linear;
+		}	
 	}
 </style>

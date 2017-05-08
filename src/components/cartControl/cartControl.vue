@@ -2,11 +2,11 @@
 	<div class="cart">
 		<transition name="fade">
 			<div v-if="food.count">
-				<a class="icon-remove_circle_outline" @click="descrease"></a>
+				<a class="icon-remove_circle_outline" @click.stop="descrease"></a>
 				<span class="num">{{food.count}}</span>
 			</div>
 		</transition>
-		<a class="icon-add_circle" @click="add" ref="addbtn"></a>
+		<a class="icon-add_circle" @click.stop="add" ref="addbtn"></a>
 	</div>
 </template>
 <script>
