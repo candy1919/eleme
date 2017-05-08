@@ -23,16 +23,19 @@
 			<h3 class="title">商品介绍</h3>
 			<p class="text">{{selectedFood.info}}</p>
 		</div>
+		<split></split>
 		<div class="content">
 			<h3 class="title">商品评价</h3>
-			<ratingselect></ratingselect>
+			<div class="select-wrap">
+				<ratingselect></ratingselect>
+			</div>
 			<div class="list">
 				<div class="list-item">
 					<div class="user">
 						<div class="time">
 							<span></span><span></span>
 						</div>
-						<div class="user">
+						<div class="name">
 							<span></span><img>
 						</div>
 					</div>
@@ -67,6 +70,7 @@
 <style lang="less" scoped>
 	.food{
 		position:fixed;
+		overflow: auto;
 		top:0;
 		left: 0;
 		right: 0;
@@ -140,6 +144,67 @@
 					color: #fff;
 					background-color: rgb(0, 160, 220);
 					border-radius: 12px;
+				}
+			}
+		}
+		.content{
+			padding: 18px;
+			.title{
+				margin-bottom: 6px;
+				font-size: 14px;
+				font-weight: 300;
+			}
+			.text{
+				padding: 0 8px;
+				line-height: 24px;
+				font-size: 12px;
+				font-weight: 200;
+				color:rgb(77, 85, 93);
+			}
+			.select-wrap{
+				margin: 12px 0 18px 0;
+			}
+			.list{
+				padding: 0 18px;
+				border-top: 1px solid rgba(7, 17, 27, 0.1);
+				.list-item{
+					padding: 16px 0;
+					.user{
+						overflow: hidden;
+						line-height: 12px;
+						font-size: 10px;
+						color:rgb(147,153,159);
+						.time{
+							float: left;
+						}
+						.name{
+							float: right;
+							img{
+								margin-left: 6px;
+								width: 12px;
+								height: 12px;
+								border-radius: 50%;
+							}
+						}
+					}
+					.rating{
+						.icon-thumb_down,.icon-thumb_up{
+							margin-right: 4px;
+							line-height: 24px;
+							font-size: 12px;
+						}
+						.icon-thumb_down{
+							color:rgb(147, 153, 159);
+						}
+						.icon-thumb_up{
+							color:rgb(0, 160, 220);
+						}
+						.rating-text{
+							line-height: 16px;
+							font-size: 12px;
+							color: rgb(7, 17, 27);
+						}
+					}
 				}
 			}
 		}
