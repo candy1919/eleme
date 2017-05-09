@@ -34,7 +34,7 @@
 				<div v-else class="list-item" v-for="item in listratings">
 					<div class="user">
 						<div class="time">
-							<span>{{item.rateTime}}|formate</span>
+							<span>{{item.rateTime | formate}}</span>
 						</div>
 						<div class="name">
 							<span>{{item.username}}</span><img :src="item.avatar">
@@ -122,6 +122,7 @@
 		},
 		filters:{
 			formate(time){
+				time=new Date(time);
 				return formateTime(time,'yyyy-MM-dd hh:mm')
 			}
 		}
