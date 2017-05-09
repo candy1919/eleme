@@ -1,8 +1,8 @@
 <template>
-	<div v-show="show" class="food">
+	<div v-if="show" class="food">
 		<div class="image-header">
 			<img :src="selectedFood.image">
-			<i class="icon-arrow_lift"></i>
+			<i class="icon-arrow_lift" @click="quit"></i>
 		</div>
 		<div class="food-detail">
 			<h3 class="name">{{selectedFood.name}}</h3>
@@ -13,9 +13,9 @@
 				<span class="newprice">{{selectedFood.price}}</span>
 				<span class="oldprice">{{selectedFood.oldPrice}}</span>
 			</div>
-			<div class="cart">
-				<span class="add" v-if="!selectedFood.count">加入购物车</span>
-				<cartControl v-else></cartControl>
+			<div class="cart-wrap">
+				<span class="add" v-if="!selectedFood.count" @click="addfood">加入购物车</span>
+				<cartControl v-else :food="selectedFood" @add="addcart"></cartControl>
 			</div>
 		</div>
 		<split></split>
@@ -27,21 +27,22 @@
 		<div class="content">
 			<h3 class="title">商品评价</h3>
 			<div class="select-wrap">
-				<ratingselect></ratingselect>
+				<ratingselect :ratings="selectedFood.ratings" :ratingtype="ratingtype" :onlycontent="onlycontent" :desc="desc" @changetype="changetype" @changecontent="changecontent"></ratingselect>
 			</div>
 			<div class="list">
-				<div class="list-item">
+				<div v-if="!listratings.length">暂无评论</div>
+				<div v-else class="list-item" v-for="item in listratings">
 					<div class="user">
 						<div class="time">
-							<span></span><span></span>
+							<span>{{item.rateTime}}|formate</span>
 						</div>
 						<div class="name">
-							<span></span><img>
+							<span>{{item.username}}</span><img :src="item.avatar">
 						</div>
 					</div>
 					<div class="rating">
-						<i></i>
-						<p class="rating-text"></p>
+						<i :class="[item.rateType?'icon-thumb_down':'icon-thumb_up']"></i>
+						<p class="rating-text">{{item.text}}</p>
 					</div>
 				</div>	
 			</div>
@@ -52,6 +53,13 @@
 <script>
 	import ratingselect from 'components/ratingselect/ratingselect'
 	import split from 'components/split/split'
+	import cartControl from  'components/cartControl/cartControl'
+	import Vue from 'vue'
+	import {formateTime} from 'common/js/date.js'
+	const POSITIVE=0;
+	const NEGATIVE=1;
+	const ALL=2;
+
 	export default{
 		props:{
 			selectedFood:{
@@ -63,7 +71,59 @@
 		},
 		components:{
 			ratingselect,
-			split
+			split,
+			cartControl
+		},
+		data(){
+			return{
+				ratingtype:2,
+				onlycontent:false,
+				desc:{
+					all:'全部',
+					positive:'满意',
+					negative:'吐槽'
+				}
+			}
+		},
+		computed:{
+			listratings(){
+				let ratings=[];
+				if(this.ratingtype!=2){
+					ratings=this.selectedFood.ratings.filter((rating)=>{
+						return rating.rateType===this.ratingtype
+					})
+				}else{
+					ratings=this.selectedFood.ratings
+				}
+				if(this.onlycontent){
+					ratings=ratings.filter((rating)=>{
+						return rating.text
+					})
+				}
+				return ratings;
+			}
+		},
+		methods:{
+			addcart(el){
+				this.$emit('add',el);
+			},
+			addfood(){
+				Vue.set(this.selectedFood,'count',1);
+			},
+			quit(){
+				this.$emit('quit');
+			},
+			changetype(type){
+				this.ratingtype=type
+			},
+			changecontent(){
+				this.onlycontent=!this.onlycontent
+			}
+		},
+		filters:{
+			formate(time){
+				return formateTime(time,'yyyy-MM-dd hh:mm')
+			}
 		}
 	}
 </script>
@@ -74,7 +134,7 @@
 		top:0;
 		left: 0;
 		right: 0;
-		bottom: 60px;
+		bottom: 50px;
 		z-index: 20;
 		background-color: #fff;
 		.image-header{
@@ -133,7 +193,7 @@
 					text-decoration: line-through;
 				}
 			}
-			.cart{
+			.cart-wrap{
 				position: absolute;
 				right: 18px;
 				bottom: 18px;
@@ -162,7 +222,7 @@
 				color:rgb(77, 85, 93);
 			}
 			.select-wrap{
-				margin: 12px 0 18px 0;
+				margin-top: 12px;
 			}
 			.list{
 				padding: 0 18px;
@@ -188,6 +248,7 @@
 						}
 					}
 					.rating{
+						font-size: 0;
 						.icon-thumb_down,.icon-thumb_up{
 							margin-right: 4px;
 							line-height: 24px;
@@ -200,6 +261,7 @@
 							color:rgb(0, 160, 220);
 						}
 						.rating-text{
+							display: inline-block;
 							line-height: 16px;
 							font-size: 12px;
 							color: rgb(7, 17, 27);

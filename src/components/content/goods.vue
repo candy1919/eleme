@@ -28,13 +28,14 @@
 			</div>
 		</div>
 		</div>
-		<food :show="foodShow" :selectedFood="fooditem"></food>
+		<food :show="foodShow" :selectedFood="fooditem" @quit="quit" @add="addcart"></food>
 		<vFooter :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice" :selectFood="selectFood" ref="cart"></vFooter>
 	</div>
 </template>
 <script>
 import cartControl from 'components/cartControl/cartControl'
 import food from 'components/food/food'
+import Vue from 'vue'
 export default{
 	components:{
 		cartControl,
@@ -84,10 +85,12 @@ export default{
 	  	});
 	},
 	methods:{
+		quit(){
+			this.foodShow=false;	
+		},
 		chosefood(item){
 			this.fooditem=item;
 			this.foodShow=true;
-			console.log(this.fooditem.name)
 		},
 		addcart(el){
 			let cart=this.$refs.cart;
