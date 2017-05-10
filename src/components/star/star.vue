@@ -11,7 +11,7 @@
 	export default{
 		props:{
 			'size':Number,
-			'score':Number
+			'score':[Number,String]
 		},
 		computed:{
 			starType(){
@@ -45,7 +45,7 @@
 			.star-item{
 				width: 20px;
 				height: 20px;
-				margin-right: 22px;
+				margin-right: 11px;
 				background-size: 100% 100%;
 				&:last-child{
 					margin-right: 0;
@@ -65,7 +65,7 @@
 			.star-item{
 				width: 15px;
 				height: 15px;
-				margin-right: 17px;
+				margin-right: 5px;
 				background-size: 100% 100%;
 				&:last-child{
 					margin-right: 0;
@@ -85,7 +85,7 @@
 			.star-item{
 				width: 10px;
 				height: 10px;
-				margin-right: 12px;
+				margin-right: 3px;
 				background-size: 100% 100%;
 				&:last-child{
 					margin-right: 0;

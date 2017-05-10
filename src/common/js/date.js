@@ -1,4 +1,5 @@
 export function formateTime(date,fmt){
+	//(x) 匹配 'x' 并且记住匹配项，就像下面的例子展示的那样。括号被称为 捕获括号。
 	if(/(y+)/.test(fmt)){
 		fmt=fmt.replace(RegExp.$1,(date.getFullYear()+'').substr(4-RegExp.$1.length))
 	}
