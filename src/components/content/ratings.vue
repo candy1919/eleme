@@ -52,6 +52,7 @@
 						<i :class="[rating.rateType===0?'icon-thumb_up':'icon-thumb_down']"></i>
 						<span class="tag border-1px" v-for="item in rating.recommend">{{item}}</span>
 					</div>
+					<div class="time">{{rating.rateTime | formate}}</div>
 				</div>
 			</div>
 		</div>
@@ -61,6 +62,7 @@
 	import split from 'components/split/split'
 	import ratingselect from 'components/ratingselect/ratingselect'
 	import star from 'components/star/star' 
+	import {formateTime} from 'common/js/date.js'
 	export default{
 		components:{
 			split,
@@ -142,6 +144,12 @@
 			},
 			changecontent(){
 				this.onlycontent=!this.onlycontent
+			}
+		},
+		filters:{
+			formate(time){
+				let date=new Date(time);
+				return formateTime(date,'yyyy-MM-dd hh:mm');
 			}
 		}
 	}
@@ -281,6 +289,15 @@
 							border-radius: 1px;
 							border:1px solid rgba(7, 17, 27, 0.1)
 						}
+					}
+					.time{
+						position: absolute;
+						right:0;
+						top:0;
+						line-height: 12px;
+						font-size: 10px;
+						font-weight: 200;
+						color:rgb(147, 153, 159);
 					}
 				}
 			}
